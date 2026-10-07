@@ -1,1 +1,148 @@
 @import "tailwindcss";
+
+@theme {
+  --color-ivory: #F8F8F3;
+  --color-ink: #30302B;
+  --color-gold: #B0925C;
+  --color-champagne: #E7DCC6;
+  --color-petal: #EAD7CE;
+  --color-sage: #A7AE98;
+  --color-stone: #8C887C;
+
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  --ivory: #F8F8F3;
+  --ink: #30302B;
+  --gold: #B0925C;
+  --champagne: #E7DCC6;
+  --petal: #EAD7CE;
+  --sage: #A7AE98;
+  --stone: #8C887C;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--ivory);
+  color: var(--ink);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--ivory);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   EDITORIAL TYPOGRAPHY
+   ============================================================ */
+
+.font-display {
+  font-family: var(--font-serif);
+  font-weight: 500;
+}
+
+.font-editorial-italic {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* ============================================================
+   BRAND LETTER SPACING
+   ============================================================ */
+
+.tracking-brand-label {
+  letter-spacing: 0.25em;
+}
+
+.tracking-brand-wide {
+  letter-spacing: 0.28em;
+}
+
+/* ============================================================
+   SELECTION
+   ============================================================ */
+
+::selection {
+  background-color: rgba(176, 146, 92, 0.2);
+  color: #30302B;
+}
+
+/* ============================================================
+   HERO SCROLL INDICATOR
+   ============================================================ */
+
+.hero-scroll-line {
+  animation: sevane-scroll-line 2.2s
+    cubic-bezier(0.65, 0, 0.35, 1)
+    infinite;
+  will-change: transform;
+}
+
+@keyframes sevane-scroll-line {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  50% {
+    transform: translateY(100%);
+  }
+
+  100% {
+    transform: translateY(200%);
+  }
+}
+
+/* ============================================================
+   IMAGE / EDITORIAL PERFORMANCE
+   ============================================================ */
+
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-clip {
+  will-change: clip-path;
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-scroll-line {
+    animation: none;
+  }
+
+  .will-change-transform,
+  .will-change-opacity,
+  .will-change-clip {
+    will-change: auto;
+  }
+}
+
+/* ============================================================
+   MOBILE SAFE AREA
+   ============================================================ */
+
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}

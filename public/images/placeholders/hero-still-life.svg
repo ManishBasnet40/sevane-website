@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" width="1200" height="1500">
+  <rect width="1200" height="1500" fill="#E7DCC6" />
+  <rect x="40" y="40" width="1120" height="1420" fill="none" stroke="#8C887C" stroke-width="1" stroke-dasharray="8 8" opacity="0.4" />
+  
+  <!-- Subtle tactile botanical geometry -->
+  <g transform="translate(600, 720)" stroke="#B0925C" stroke-width="1.5" fill="none" opacity="0.5">
+    <ellipse cx="0" cy="0" rx="220" ry="320" />
+    <ellipse cx="0" cy="0" rx="320" ry="220" />
+    <path d="M0 -340 C100 -200 100 200 0 340 C-100 200 -100 -200 0 -340" />
+    <line x1="-360" y1="0" x2="360" y2="0" stroke-dasharray="4 6" />
+    <line x1="0" y1="-360" x2="0" y2="360" stroke-dasharray="4 6" />
+  </g>
+
+  <!-- Editorial watermark/label -->
+  <text x="600" y="1180" font-family="sans-serif" font-size="14" letter-spacing="4" fill="#30302B" text-anchor="middle" opacity="0.75">
+    TEMPORARY EDITORIAL PHOTOGRAPHY PLACEHOLDER
+  </text>
+  <text x="600" y="1220" font-family="serif" font-size="28" font-style="italic" fill="#30302B" text-anchor="middle" opacity="0.85">
+    Diffuse Daylight · Natural Matter · Still Life
+  </text>
+  <text x="600" y="1260" font-family="sans-serif" font-size="12" letter-spacing="3" fill="#8C887C" text-anchor="middle">
+    ASSET SLOT: HERO_STILL_LIFE (REPLACE WITH FINAL ARTWORK)
+  </text>
+</svg>

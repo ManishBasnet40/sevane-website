@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1100" width="800" height="1100">
+  <rect width="800" height="1100" fill="#F8F8F3" />
+  <rect x="25" y="25" width="750" height="1050" fill="none" stroke="#E7DCC6" stroke-width="1.5" />
+  
+  <!-- Dropper bottle outline -->
+  <g transform="translate(400, 480)" stroke="#30302B" stroke-width="1.5" fill="none">
+    <!-- Dropper bulb & cap -->
+    <path d="M-22,-280 C-22,-305 22,-305 22,-280 L20,-240 L-20,-240 Z" fill="#E7DCC6" />
+    <rect x="-35" y="-240" width="70" height="40" rx="2" fill="#B0925C" stroke="#B0925C" />
+    <rect x="-30" y="-200" width="60" height="15" fill="#E7DCC6" />
+    
+    <!-- Bottle body -->
+    <path d="M-80,-185 C-40,-185 -30,-185 -30,-185 L30,-185 C30,-185 40,-185 80,-185 C95,-185 105,-175 105,-155 L105,180 C105,200 95,210 75,210 L-75,210 C-95,210 -105,200 -105,180 L-105,-155 C-105,-175 -95,-185 -80,-185 Z" fill="#F8F8F3" />
+    
+    <!-- Label boundary on bottle -->
+    <rect x="-70" y="-90" width="140" height="210" fill="#F8F8F3" stroke="#8C887C" stroke-width="0.8" stroke-dasharray="3 3" />
+    <text x="0" y="-30" font-family="serif" font-size="20" fill="#30302B" text-anchor="middle" font-weight="500">Sévane</text>
+    <line x1="-30" y1="-15" x2="30" y2="-15" stroke="#B0925C" stroke-width="0.8" />
+    <text x="0" y="5" font-family="sans-serif" font-size="8" letter-spacing="2" fill="#30302B" text-anchor="middle">SÉRUM ÉCLAT</text>
+    <text x="0" y="25" font-family="sans-serif" font-size="8" letter-spacing="1.5" fill="#8C887C" text-anchor="middle">30 ML</text>
+  </g>
+
+  <text x="400" y="860" font-family="sans-serif" font-size="11" letter-spacing="3" fill="#8C887C" text-anchor="middle">
+    TEMPORARY PRODUCT VISUAL PLACEHOLDER
+  </text>
+  <text x="400" y="890" font-family="sans-serif" font-size="10" letter-spacing="2" fill="#B0925C" text-anchor="middle">
+    SLOT: PRODUCT_SERUM_ECLAT (30 ML)
+  </text>
+</svg>
