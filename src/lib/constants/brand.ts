@@ -1,8 +1,3 @@
-/**
- * Official Sévane Brand Copy & Content Registry
- * Sourced directly from Sévane Brand Guidelines v1.0
- */
-
 import { PLACEHOLDER_ASSETS } from "./assets";
 
 export const BRAND_INFO = {
@@ -14,11 +9,11 @@ export const BRAND_INFO = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: "Maison", href: "#story" },
-  { label: "Rituals", href: "#rituals" },
-  { label: "Philosophy", href: "#philosophy" },
-  { label: "Sanctuary", href: "#sanctuary" },
-  { label: "Contact", href: "#invitation" },
+  { label: "Maison", href: "/#story" },
+  { label: "Rituals", href: "/#rituals" },
+  { label: "Philosophy", href: "/#philosophy" },
+  { label: "Sanctuary", href: "/#sanctuary" },
+  { label: "Contact", href: "/#invitation" },
 ] as const;
 
 export interface ProductItem {
