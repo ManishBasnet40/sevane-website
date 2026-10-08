@@ -183,7 +183,7 @@ export const Navbar: React.FC = () => {
           </nav>
 
           <Link
-            href="#rituals"
+            href="/#rituals"
             className={`
               hidden
               items-center
@@ -244,7 +244,9 @@ export const Navbar: React.FC = () => {
                   ? "bg-white"
                   : "bg-[#30302B]"
               } ${
-                mobileMenuOpen ? "opacity-0" : ""
+                mobileMenuOpen
+                  ? "opacity-0"
+                  : ""
               }`}
             />
 

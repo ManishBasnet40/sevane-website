@@ -9,11 +9,11 @@ export const BRAND_INFO = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: "Maison", href: "/#story" },
-  { label: "Rituals", href: "/#rituals" },
-  { label: "Philosophy", href: "/#philosophy" },
-  { label: "Sanctuary", href: "/#sanctuary" },
-  { label: "Contact", href: "/#invitation" },
+  { label: "Maison", href: "/story" },
+  { label: "Rituals", href: "/rituals" },
+  { label: "Philosophy", href: "/philosophy" },
+  { label: "Sanctuary", href: "/sanctuary" },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
 export interface ProductItem {
