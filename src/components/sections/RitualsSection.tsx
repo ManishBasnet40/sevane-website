@@ -13,7 +13,6 @@ export default function RitualsSection() {
   const backgroundRef = useRef<HTMLDivElement | null>(null);
   const overtureRef = useRef<HTMLDivElement | null>(null);
   const folioRef = useRef<HTMLDivElement | null>(null);
-  const progressRef = useRef<HTMLDivElement | null>(null);
 
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -46,15 +45,13 @@ export default function RitualsSection() {
       const background = backgroundRef.current;
       const overture = overtureRef.current;
       const folio = folioRef.current;
-      const progress = progressRef.current;
 
       if (
         !container ||
         !stage ||
         !background ||
         !overture ||
-        !folio ||
-        !progress
+        !folio
       ) {
         return;
       }
@@ -85,13 +82,13 @@ export default function RitualsSection() {
 
       gsap.set(images, {
         opacity: 0,
-        scale: 0.88,
-        x: -30,
+        scale: 0.9,
+        x: -25,
       });
 
       gsap.set(infos, {
         opacity: 0,
-        x: 45,
+        x: 35,
       });
 
       gsap.set(numerals, {
@@ -104,17 +101,12 @@ export default function RitualsSection() {
 
       gsap.set(overture, {
         opacity: 0,
-        y: 20,
+        y: 15,
       });
 
       gsap.set(folio, {
         opacity: 0,
-        y: 20,
-      });
-
-      gsap.set(progress, {
-        scaleX: 0,
-        transformOrigin: "left center",
+        y: 15,
       });
 
       const activateProduct = (index: number) => {
@@ -130,9 +122,9 @@ export default function RitualsSection() {
         images.forEach((image, imageIndex) => {
           gsap.to(image, {
             opacity: imageIndex === index ? 1 : 0,
-            scale: imageIndex === index ? 1 : 0.88,
-            x: imageIndex === index ? 0 : -30,
-            duration: 0.9,
+            scale: imageIndex === index ? 1 : 0.9,
+            x: imageIndex === index ? 0 : -25,
+            duration: 0.8,
             ease: "power3.out",
             overwrite: true,
           });
@@ -141,8 +133,8 @@ export default function RitualsSection() {
         infos.forEach((info, infoIndex) => {
           gsap.to(info, {
             opacity: infoIndex === index ? 1 : 0,
-            x: infoIndex === index ? 0 : 45,
-            duration: 0.75,
+            x: infoIndex === index ? 0 : 35,
+            duration: 0.7,
             ease: "power3.out",
             overwrite: true,
           });
@@ -151,7 +143,7 @@ export default function RitualsSection() {
         numerals.forEach((numeral, numeralIndex) => {
           gsap.to(numeral, {
             opacity: numeralIndex === index ? 1 : 0,
-            duration: 0.6,
+            duration: 0.5,
             ease: "power2.out",
             overwrite: true,
           });
@@ -159,8 +151,8 @@ export default function RitualsSection() {
 
         tabs.forEach((tab, tabIndex) => {
           gsap.to(tab, {
-            opacity: tabIndex === index ? 1 : 0.35,
-            duration: 0.35,
+            opacity: tabIndex === index ? 1 : 0.4,
+            duration: 0.3,
             ease: "power2.out",
             overwrite: true,
           });
@@ -174,7 +166,7 @@ export default function RitualsSection() {
       intro
         .to(background, {
           opacity: 1,
-          duration: 1,
+          duration: 0.9,
           ease: "power2.out",
         })
         .to(
@@ -182,20 +174,20 @@ export default function RitualsSection() {
           {
             opacity: 1,
             y: 0,
-            duration: 0.7,
+            duration: 0.65,
             ease: "power3.out",
           },
-          "-=0.65"
+          "-=0.55"
         )
         .to(
           folio,
           {
             opacity: 1,
             y: 0,
-            duration: 0.7,
+            duration: 0.65,
             ease: "power3.out",
           },
-          "-=0.5"
+          "-=0.45"
         );
 
       const scrollAnimation = gsap.to(
@@ -211,10 +203,6 @@ export default function RitualsSection() {
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               const value = self.progress;
-
-              gsap.set(progress, {
-                scaleX: value,
-              });
 
               if (value < 0.333) {
                 activateProduct(0);
@@ -249,11 +237,11 @@ export default function RitualsSection() {
         >
           <div
             ref={backgroundRef}
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_45%,rgba(176,146,92,0.1),transparent_35%),radial-gradient(circle_at_75%_55%,rgba(48,48,43,0.04),transparent_35%)]"
+            className="pointer-events-none absolute inset-0 bg-[#f8f8f3]"
           />
 
-          <div className="relative z-10 flex h-full w-full flex-col px-8 py-8 xl:px-16 2xl:px-24">
-            <header className="flex w-full items-center justify-between border-b border-[#30302B]/15 pb-5">
+          <div className="relative z-10 flex h-full w-full flex-col px-6 py-8 md:px-16 lg:px-20 xl:px-24">
+            <header className="flex w-full items-center justify-between">
               <div
                 ref={overtureRef}
                 className="flex items-center gap-4 text-[#30302B]"
@@ -304,8 +292,6 @@ export default function RitualsSection() {
                         }}
                         className="relative flex h-[72vh] min-h-[520px] w-full max-w-[620px] items-center justify-center"
                       >
-                        <div className="absolute inset-[8%] bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.95),rgba(238,234,228,0.65)_48%,transparent_72%)]" />
-
                         <Image
                           src={product.placeholderSrc}
                           alt={product.name}
@@ -328,19 +314,17 @@ export default function RitualsSection() {
                       }}
                       className="absolute left-0 w-full max-w-[760px] pr-4 xl:max-w-[850px] 2xl:max-w-[900px]"
                     >
-                      <div className="mb-7 flex items-center gap-4">
+                      <div className="flex items-center gap-4">
                         <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-[#B0925C]">
                           {product.category}
                         </span>
-
-                        <span className="h-px w-10 bg-[#B0925C]/50" />
 
                         <span className="font-sans text-[10px] uppercase tracking-[0.22em] text-[#30302B]/40">
                           {product.volume}
                         </span>
                       </div>
 
-                      <h2 className="max-w-[850px] font-display text-[clamp(3.5rem,6vw,7.5rem)] font-normal leading-[0.86] tracking-[-0.045em] text-[#30302B]">
+                      <h2 className="mt-7 max-w-[850px] font-display text-[clamp(3.5rem,6vw,7.5rem)] font-normal leading-[0.86] tracking-[-0.045em] text-[#30302B]">
                         {product.name}
                       </h2>
 
@@ -348,27 +332,23 @@ export default function RitualsSection() {
                         {product.role}
                       </p>
 
-                      <div className="mt-9 max-w-[760px] border-t border-[#30302B]/15 pt-7">
-                        <p className="max-w-[700px] font-sans text-sm leading-7 text-[#30302B]/65 xl:text-[15px] xl:leading-8">
-                          {product.description}
+                      <p className="mt-8 max-w-[700px] font-sans text-sm leading-7 text-[#30302B]/65 xl:text-[15px] xl:leading-8">
+                        {product.description}
+                      </p>
+
+                      <div className="mt-8">
+                        <span className="block font-sans text-[9px] uppercase tracking-[0.28em] text-[#B0925C]">
+                          Ritual
+                        </span>
+
+                        <p className="mt-3 max-w-[400px] font-sans text-xs leading-6 text-[#30302B]/60">
+                          {product.ritualStep}
                         </p>
-                      </div>
-
-                      <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
-                        <div>
-                          <span className="mb-2 block font-sans text-[9px] uppercase tracking-[0.28em] text-[#B0925C]">
-                            Ritual
-                          </span>
-
-                          <p className="max-w-[400px] font-sans text-xs leading-6 text-[#30302B]/60">
-                            {product.ritualStep}
-                          </p>
-                        </div>
                       </div>
 
                       <a
                         href={`/products/${product.id}`}
-                        className="group mt-9 inline-flex items-center gap-5 border-b border-[#30302B]/40 pb-2 font-sans text-[10px] uppercase tracking-[0.3em] text-[#30302B] transition-colors duration-500 hover:border-[#B0925C] hover:text-[#B0925C]"
+                        className="group mt-9 inline-flex items-center gap-5 font-sans text-[10px] uppercase tracking-[0.3em] text-[#30302B] transition-colors duration-500 hover:text-[#B0925C]"
                       >
                         Explore
                         <span className="text-base transition-transform duration-500 group-hover:translate-x-2">
@@ -381,7 +361,7 @@ export default function RitualsSection() {
               </div>
             </div>
 
-            <footer className="relative z-20 flex w-full items-end justify-between border-t border-[#30302B]/15 pt-5">
+            <footer className="relative z-20 flex w-full items-end justify-between pt-5">
               <div className="flex items-center gap-7">
                 {PRODUCTS.map((product, index) => (
                   <button
@@ -403,20 +383,13 @@ export default function RitualsSection() {
                   </button>
                 ))}
               </div>
-
-              <div className="relative h-px w-32 overflow-hidden bg-[#30302B]/15 xl:w-56 2xl:w-72">
-                <div
-                  ref={progressRef}
-                  className="absolute inset-y-0 left-0 w-full origin-left scale-x-0 bg-[#B0925C]"
-                />
-              </div>
             </footer>
           </div>
         </div>
       </section>
 
-      <section className="w-full bg-[#f8f8f3] px-5 py-20 lg:hidden">
-        <div className="mb-12 flex items-center justify-between border-b border-[#30302B]/15 pb-5">
+      <section className="w-full bg-[#f8f8f3] px-6 py-20 lg:hidden">
+        <div className="mb-12 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <BrandDiamond />
 
@@ -436,9 +409,7 @@ export default function RitualsSection() {
               key={product.id}
               className="relative w-full"
             >
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#eeeae4]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.95),transparent_68%)]" />
-
+              <div className="relative aspect-[4/5] w-full overflow-hidden">
                 <Image
                   src={product.placeholderSrc}
                   alt={product.name}
@@ -458,8 +429,6 @@ export default function RitualsSection() {
                     {product.category}
                   </span>
 
-                  <span className="h-px w-6 bg-[#B0925C]/50" />
-
                   <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-[#30302B]/40">
                     {product.volume}
                   </span>
@@ -473,25 +442,23 @@ export default function RitualsSection() {
                   {product.role}
                 </p>
 
-                <div className="mt-7 border-t border-[#30302B]/15 pt-6">
-                  <p className="font-sans text-sm leading-7 text-[#30302B]/65">
-                    {product.description}
-                  </p>
-                </div>
+                <p className="mt-7 font-sans text-sm leading-7 text-[#30302B]/65">
+                  {product.description}
+                </p>
 
                 <div className="mt-6">
-                  <span className="mb-3 block font-sans text-[9px] uppercase tracking-[0.25em] text-[#B0925C]">
+                  <span className="block font-sans text-[9px] uppercase tracking-[0.25em] text-[#B0925C]">
                     Ritual
                   </span>
 
-                  <p className="font-sans text-sm leading-7 text-[#30302B]/65">
+                  <p className="mt-3 font-sans text-sm leading-7 text-[#30302B]/65">
                     {product.ritualStep}
                   </p>
                 </div>
 
                 <a
                   href={`/products/${product.id}`}
-                  className="group mt-8 inline-flex items-center gap-5 border-b border-[#30302B]/40 pb-2 font-sans text-[10px] uppercase tracking-[0.28em] text-[#30302B]"
+                  className="group mt-8 inline-flex items-center gap-5 font-sans text-[10px] uppercase tracking-[0.28em] text-[#30302B]"
                 >
                   Explore
                   <span className="text-base transition-transform duration-500 group-hover:translate-x-2">

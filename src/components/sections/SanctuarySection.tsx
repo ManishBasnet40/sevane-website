@@ -1,62 +1,143 @@
 "use client";
 
 import React, { useRef } from "react";
-import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { PLACEHOLDER_ASSETS } from "@/lib/constants/assets";
 import { BRAND_INFO } from "@/lib/constants/brand";
 import BrandDiamond from "../brand/BrandDiamond";
-import HairlineRule from "../common/HairlineRule";
 
 export const SanctuarySection: React.FC = () => {
   const containerRef = useRef<HTMLElement>(null);
   const pinWrapRef = useRef<HTMLDivElement>(null);
+
   const slide1Ref = useRef<HTMLDivElement>(null);
   const slide2Ref = useRef<HTMLDivElement>(null);
+
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
+
+  const text1Ref = useRef<HTMLDivElement>(null);
+  const text2Ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
-      // Desktop Pinning & Crossfade (min-width: 769px)
       mm.add("(min-width: 769px)", () => {
+        if (
+          !containerRef.current ||
+          !pinWrapRef.current ||
+          !slide1Ref.current ||
+          !slide2Ref.current ||
+          !video1Ref.current ||
+          !video2Ref.current ||
+          !text1Ref.current ||
+          !text2Ref.current
+        ) {
+          return;
+        }
+
+        gsap.set(slide2Ref.current, {
+          opacity: 0,
+        });
+
+        gsap.set(video1Ref.current, {
+          scale: 1.04,
+        });
+
+        gsap.set(video2Ref.current, {
+          scale: 1.08,
+        });
+
+        gsap.set(text1Ref.current, {
+          x: 0,
+          opacity: 1,
+        });
+
+        gsap.set(text2Ref.current, {
+          x: 50,
+          opacity: 0,
+        });
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: "+=160%",
+            end: "+=190%",
             pin: pinWrapRef.current,
             scrub: 1.2,
             anticipatePin: 1,
+            invalidateOnRefresh: true,
           },
         });
 
-        // Slide 1 stays, then transitions smoothly to Slide 2
-        tl.to(slide1Ref.current, {
-          opacity: 0,
-          y: -24,
+        tl.to(video1Ref.current, {
+          scale: 1,
           duration: 1,
-          ease: "power2.inOut",
-        }).fromTo(
-          slide2Ref.current,
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 1, ease: "power2.inOut" },
-          "-=0.4"
-        );
+          ease: "none",
+        })
+          .to(
+            text1Ref.current,
+            {
+              x: -70,
+              opacity: 0,
+              duration: 0.9,
+              ease: "power2.inOut",
+            },
+            "-=0.55"
+          )
+          .to(
+            slide1Ref.current,
+            {
+              opacity: 0,
+              duration: 0.8,
+              ease: "power2.inOut",
+            },
+            "-=0.7"
+          )
+          .fromTo(
+            slide2Ref.current,
+            {
+              opacity: 0,
+            },
+            {
+              opacity: 1,
+              duration: 0.7,
+              ease: "power2.inOut",
+            },
+            "-=0.25"
+          )
+          .to(
+            video2Ref.current,
+            {
+              scale: 1,
+              duration: 1.1,
+              ease: "none",
+            },
+            "<"
+          )
+          .to(
+            text2Ref.current,
+            {
+              x: 0,
+              opacity: 1,
+              duration: 1,
+              ease: "power2.out",
+            },
+            "-=0.7"
+          );
       });
 
-      // Mobile Unpinned Sequential Flow (max-width: 768px)
       mm.add("(max-width: 768px)", () => {
         if (slide1Ref.current) {
           gsap.from(slide1Ref.current, {
             opacity: 0,
-            y: 24,
-            duration: 0.9,
-            ease: "power2.out",
+            y: 30,
+            duration: 1,
+            ease: "power3.out",
             scrollTrigger: {
               trigger: slide1Ref.current,
-              start: "top 85%",
+              start: "top 82%",
               once: true,
             },
           });
@@ -65,122 +146,127 @@ export const SanctuarySection: React.FC = () => {
         if (slide2Ref.current) {
           gsap.from(slide2Ref.current, {
             opacity: 0,
-            y: 24,
-            duration: 0.9,
-            ease: "power2.out",
+            y: 30,
+            duration: 1,
+            ease: "power3.out",
             scrollTrigger: {
               trigger: slide2Ref.current,
-              start: "top 85%",
+              start: "top 82%",
               once: true,
             },
           });
         }
       });
+
+      return () => {
+        mm.revert();
+      };
     },
-    { scope: containerRef }
+    {
+      scope: containerRef,
+    }
   );
 
   return (
     <section
       id="sanctuary"
       ref={containerRef}
-      className="relative bg-ink text-ivory overflow-hidden"
+      className="relative overflow-hidden bg-ink text-ivory"
     >
       <div
         ref={pinWrapRef}
-        className="min-h-screen flex flex-col justify-center px-6 md:px-12 py-20 md:py-24 max-w-7xl mx-auto"
+        className="relative mx-auto flex min-h-screen w-full max-w-[1800px] items-center px-6 py-20 sm:px-10 md:px-14 lg:px-20 xl:px-24"
       >
-        {/* Container: Relative flex-col on mobile (stacked), pinned container on desktop */}
-        <div className="relative w-full flex flex-col md:block items-center justify-center">
-          {/* Slide 1: The Daytime Bloom */}
+        <div className="relative flex min-h-[620px] w-full items-center">
           <div
             ref={slide1Ref}
-            className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10"
+            className="relative z-10 grid w-full items-center gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16 xl:gap-24"
           >
-            <div className="lg:col-span-6 space-y-5 md:space-y-6">
-              <div className="flex items-center gap-2.5">
+            <div
+              ref={text1Ref}
+              className="max-w-xl lg:pl-4"
+            >
+              <div className="mb-7 flex items-center gap-3">
                 <BrandDiamond size={6} color="#B0925C" />
-                <span className="font-sans text-[11px] uppercase tracking-brand-wide text-gold">
+
+                <span className="font-sans text-[9px] font-medium uppercase tracking-[0.3em] text-gold">
                   The Botanical Sanctuary
                 </span>
               </div>
 
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-ivory font-medium leading-[1.12]">
+              <h2 className="max-w-[650px] font-display text-[clamp(3rem,5vw,6.5rem)] font-medium leading-[0.9] tracking-[-0.045em] text-ivory">
                 {BRAND_INFO.essence}
               </h2>
 
-              <p className="font-editorial-italic text-base sm:text-lg lg:text-xl text-ivory/80 leading-relaxed max-w-lg">
+              <p className="mt-8 max-w-lg font-editorial-italic text-lg leading-[1.45] text-ivory/70 md:text-xl">
                 Where unhurried craftsmanship meets living botanical matter. Every
                 drop is an ode to skin in balance.
               </p>
 
-              <div className="pt-2">
-                <span className="font-sans text-[10px] uppercase tracking-brand-wide text-stone">
-                  Diffuse daylight · Tactile linen · Pure extracts
-                </span>
-              </div>
+              <p className="mt-8 font-sans text-[8px] font-medium uppercase tracking-[0.28em] text-stone/70">
+                Diffuse daylight · Tactile linen · Pure extracts
+              </p>
             </div>
 
-            <div className="lg:col-span-6 relative aspect-[16/10] overflow-hidden border border-gold/30 bg-ink/80">
-              <Image
-                src={PLACEHOLDER_ASSETS.immersiveDaylight.src}
-                alt={PLACEHOLDER_ASSETS.immersiveDaylight.alt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
+            <div className="relative h-[55vh] min-h-[460px] overflow-hidden lg:h-[68vh] lg:min-h-[560px]">
+              <video
+                ref={video1Ref}
+                src="/images/video/morning.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="h-full w-full object-cover will-change-transform"
               />
-              <div className="absolute bottom-3 left-3 bg-ink/90 px-2.5 py-1 text-[9px] font-sans uppercase tracking-brand-wide text-gold">
-                Slot: Morning Light
-              </div>
+
+              <div className="pointer-events-none absolute inset-0 bg-black/[0.04]" />
             </div>
           </div>
 
-          {/* Mobile Divider Between Stacked Slides */}
-          <div className="w-full my-16 md:hidden">
-            <HairlineRule withDiamond={true} color="gold" />
-          </div>
-
-          {/* Slide 2: The Night Restorative Veil */}
-          {/* On mobile: relative in normal document flow. On desktop: absolute inset-0 driven by pinning */}
           <div
             ref={slide2Ref}
-            className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative md:absolute md:inset-0 md:opacity-0 z-20"
+            className="absolute inset-0 z-20 grid w-full items-center gap-10 lg:grid-cols-[1.22fr_0.78fr] lg:gap-16 xl:gap-24"
           >
-            <div className="lg:col-span-6 space-y-5 md:space-y-6">
-              <div className="flex items-center gap-2.5">
+            <div className="relative order-2 h-[55vh] min-h-[460px] overflow-hidden lg:order-1 lg:h-[68vh] lg:min-h-[560px]">
+              <video
+                ref={video2Ref}
+                src="/images/video/night.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="h-full w-full object-cover will-change-transform"
+              />
+
+              <div className="pointer-events-none absolute inset-0 bg-black/[0.06]" />
+            </div>
+
+            <div
+              ref={text2Ref}
+              className="order-1 max-w-xl lg:order-2 lg:pr-4"
+            >
+              <div className="mb-7 flex items-center gap-3">
                 <BrandDiamond size={6} color="#B0925C" />
-                <span className="font-sans text-[11px] uppercase tracking-brand-wide text-gold">
+
+                <span className="font-sans text-[9px] font-medium uppercase tracking-[0.3em] text-gold">
                   The Evening Stillness
                 </span>
               </div>
 
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-ivory font-medium leading-[1.12]">
+              <h2 className="max-w-[600px] font-display text-[clamp(3rem,5vw,6.5rem)] font-medium leading-[0.9] tracking-[-0.045em] text-ivory">
                 Skin, at rest.
               </h2>
 
-              <p className="font-editorial-italic text-base sm:text-lg lg:text-xl text-ivory/80 leading-relaxed max-w-lg">
+              <p className="mt-8 max-w-lg font-editorial-italic text-lg leading-[1.45] text-ivory/70 md:text-xl">
                 In the quietest moments, your truest ritual begins. Take your time:
                 the texture turns from balm to oil as it meets the warmth of your hands.
               </p>
 
-              <div className="pt-2">
-                <span className="font-sans text-[10px] uppercase tracking-brand-wide text-stone">
-                  Warm shadow · Restorative lipids · Unbroken calm
-                </span>
-              </div>
-            </div>
-
-            <div className="lg:col-span-6 relative aspect-[16/10] overflow-hidden border border-gold/30 bg-ink/80">
-              <Image
-                src={PLACEHOLDER_ASSETS.immersiveNight.src}
-                alt={PLACEHOLDER_ASSETS.immersiveNight.alt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-              <div className="absolute bottom-3 left-3 bg-ink/90 px-2.5 py-1 text-[9px] font-sans uppercase tracking-brand-wide text-gold">
-                Slot: Evening Ritual
-              </div>
+              <p className="mt-8 font-sans text-[8px] font-medium uppercase tracking-[0.28em] text-stone/70">
+                Warm shadow · Restorative lipids · Unbroken calm
+              </p>
             </div>
           </div>
         </div>

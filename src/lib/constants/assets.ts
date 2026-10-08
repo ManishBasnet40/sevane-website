@@ -1,11 +1,3 @@
-/**
- * Centralized Asset Registry for Sévane Website
- *
- * Sourced editorial photography curated from Unsplash under the Unsplash License
- * (free commercial use, no attribution required, curated for Sévane art direction:
- * natural diffused daylight, delicate botanicals, soft tactile textures, ivory/stone ground).
- */
-
 export const OFFICIAL_ASSETS = {
   logo: "/images/brand/sevane-logo.png",
   logoJpg: "/images/brand/sevane-logo.jpg",
@@ -46,15 +38,15 @@ export const EDITORIAL_ASSETS = {
   },
   rituals: {
     serumEclat: {
-      src: "/images/placeholders/product-serum.svg",
+      src: "/images/brand/product1.jpg",
       alt: "Sérum Éclat 30 ml bottle",
     },
     baumeDeNuit: {
-      src: "/images/placeholders/product-baume.svg",
+      src: "/images/brand/product2.jpg",
       alt: "Baume de Nuit 50 ml jar",
     },
     cremeHydratante: {
-      src: "/images/placeholders/product-creme.svg",
+      src: "/images/brand/product3.jpg",
       alt: "Crème Hydratante 50 ml jar",
     },
   },
@@ -79,7 +71,6 @@ export const EDITORIAL_ASSETS = {
   },
 } as const;
 
-// Backward-compatible alias for existing sections during incremental refactor
 export const PLACEHOLDER_ASSETS = {
   heroStillLife: EDITORIAL_ASSETS.hero.stillLife,
   storyBotanical: EDITORIAL_ASSETS.story.botanical,

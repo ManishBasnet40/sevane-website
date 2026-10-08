@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -10,6 +9,7 @@ import { BRAND_INFO, NAV_LINKS } from "@/lib/constants/brand";
 export const Navbar: React.FC = () => {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(true);
 
   const mobileMenuOpenRef = useRef(false);
 
@@ -22,6 +22,8 @@ export const Navbar: React.FC = () => {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+
+      setIsAtTop(currentScrollY <= 25);
 
       if (currentScrollY <= 25) {
         setIsNavbarVisible(true);
@@ -43,6 +45,8 @@ export const Navbar: React.FC = () => {
       lastScrollY = currentScrollY;
     };
 
+    setIsAtTop(window.scrollY <= 25);
+
     window.addEventListener("scroll", handleScroll, {
       passive: true,
     });
@@ -53,9 +57,7 @@ export const Navbar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen
-      ? "hidden"
-      : "";
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
@@ -78,57 +80,95 @@ export const Navbar: React.FC = () => {
     <>
       <header
         className={`
-          fixed inset-x-0 top-0 z-50
-          transition-transform duration-500
+          fixed
+          inset-x-0
+          top-0
+          z-50
+          transition-all
+          duration-500
           ${
             isNavbarVisible
               ? "translate-y-0"
               : "-translate-y-full"
           }
+          ${
+            isAtTop
+              ? "bg-transparent"
+              : "bg-white"
+          }
         `}
       >
-        {/* Wider full-screen navbar container */}
-        <div className="mx-auto flex w-full items-center justify-between px-6 py-4 md:px-16 lg:px-20 xl:px-24 md:py-5">
-          {/* Logo */}
+        <div
+          className="
+            mx-auto
+            flex
+            w-full
+            items-center
+            justify-between
+            px-6
+            py-4
+            md:px-16
+            md:py-5
+            lg:px-20
+            xl:px-24
+          "
+        >
           <Link
             href="/"
             aria-label="Sévane Home"
-            className="relative h-12 w-32 md:h-14 md:w-44"
+            className="
+              relative
+              flex
+              h-14
+              w-44
+              shrink-0
+              items-center
+              md:h-16
+              md:w-52
+            "
           >
             <Image
               src={OFFICIAL_ASSETS.logo}
               alt={BRAND_INFO.name}
               fill
               priority
-              sizes="(max-width: 768px) 128px, 176px"
-              className="object-contain object-left"
+              sizes="(max-width: 768px) 176px, 208px"
+              className="
+                object-contain
+                object-left
+              "
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden items-center gap-9 md:flex">
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="
-                  group relative
+                className={`
+                  group
+                  relative
+                  whitespace-nowrap
                   font-sans
-                  text-[10px]
+                  text-[11px]
+                  font-medium
                   uppercase
-                  tracking-[0.24em]
-                  text-white/90
+                  tracking-[0.2em]
                   transition-colors
-                  duration-300
-                  hover:text-white
-                "
+                  duration-500
+                  ${
+                    isAtTop
+                      ? "text-white"
+                      : "text-[#30302B]"
+                  }
+                `}
               >
                 {item.label}
 
                 <span
                   className="
                     absolute
-                    -bottom-1
+                    -bottom-1.5
                     left-0
                     h-px
                     w-0
@@ -142,56 +182,80 @@ export const Navbar: React.FC = () => {
             ))}
           </nav>
 
-          {/* Explore Rituals */}
           <Link
             href="#rituals"
-            className="
+            className={`
               hidden
+              items-center
+              justify-center
               border
-              border-white/50
-              px-5
-              py-2.5
+              px-6
+              py-3
               font-sans
-              text-[9px]
+              text-[10px]
+              font-medium
               uppercase
-              tracking-[0.24em]
-              text-white
+              tracking-[0.22em]
               transition-all
-              duration-300
-              hover:border-white
-              hover:bg-white
-              hover:text-[#30302B]
+              duration-500
               md:inline-flex
-            "
+              ${
+                isAtTop
+                  ? "border-white/70 text-white hover:border-white hover:bg-white hover:text-[#30302B]"
+                  : "border-[#30302B]/40 text-[#30302B] hover:border-[#30302B] hover:bg-[#30302B] hover:text-white"
+              }
+            `}
           >
             Explore Rituals
           </Link>
 
-          {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={toggleMenu}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
-            className="flex h-12 w-12 flex-col items-center justify-center gap-1.5 md:hidden"
+            className="
+              flex
+              h-12
+              w-12
+              shrink-0
+              flex-col
+              items-center
+              justify-center
+              gap-1.5
+              md:hidden
+            "
           >
             <span
-              className={`h-px w-6 bg-white transition-transform duration-300 ${
+              className={`h-[2px] w-6 transition-all duration-300 ${
+                isAtTop
+                  ? "bg-white"
+                  : "bg-[#30302B]"
+              } ${
                 mobileMenuOpen
-                  ? "translate-y-[3px] rotate-45"
+                  ? "translate-y-[3.5px] rotate-45"
                   : ""
               }`}
             />
 
             <span
-              className={`h-px w-6 bg-white transition-opacity duration-300 ${
+              className={`h-[2px] w-6 transition-all duration-300 ${
+                isAtTop
+                  ? "bg-white"
+                  : "bg-[#30302B]"
+              } ${
                 mobileMenuOpen ? "opacity-0" : ""
               }`}
             />
 
             <span
-              className={`h-px w-6 bg-white transition-transform duration-300 ${
+              className={`h-[2px] w-6 transition-all duration-300 ${
+                isAtTop
+                  ? "bg-white"
+                  : "bg-[#30302B]"
+              } ${
                 mobileMenuOpen
-                  ? "-translate-y-[3px] -rotate-45"
+                  ? "-translate-y-[3.5px] -rotate-45"
                   : ""
               }`}
             />
@@ -199,14 +263,19 @@ export const Navbar: React.FC = () => {
         </div>
       </header>
 
-      {/* Mobile Menu */}
       <div
         className={`
-          fixed inset-0 z-40
-          flex flex-col justify-between
+          fixed
+          inset-0
+          z-40
+          flex
+          flex-col
+          justify-between
           bg-[#F8F8F3]
-          px-8 py-28
-          transition-all duration-500
+          px-8
+          py-28
+          transition-all
+          duration-500
           md:hidden
           ${
             mobileMenuOpen
@@ -216,7 +285,7 @@ export const Navbar: React.FC = () => {
         `}
       >
         <nav className="flex flex-col gap-6">
-          <span className="font-sans text-[9px] uppercase tracking-[0.28em] text-[#8C887C]">
+          <span className="font-sans text-[10px] font-medium uppercase tracking-[0.28em] text-[#8C887C]">
             Navigation
           </span>
 
@@ -228,8 +297,10 @@ export const Navbar: React.FC = () => {
               className="
                 font-display
                 text-4xl
+                leading-tight
                 text-[#30302B]
                 transition-colors
+                duration-300
                 hover:text-[#B0925C]
               "
             >
@@ -243,7 +314,7 @@ export const Navbar: React.FC = () => {
             {BRAND_INFO.essence}
           </p>
 
-          <p className="mt-3 font-sans text-[9px] uppercase tracking-[0.28em] text-[#8C887C]">
+          <p className="mt-3 font-sans text-[10px] font-medium uppercase tracking-[0.28em] text-[#8C887C]">
             {BRAND_INFO.descriptor}
           </p>
         </div>
