@@ -9,7 +9,7 @@ export const BRAND_INFO = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: "Maison", href: "/story" },
+  { label: "Maison", href: "/" },
   { label: "Rituals", href: "/rituals" },
   { label: "Philosophy", href: "/philosophy" },
   { label: "Sanctuary", href: "/sanctuary" },

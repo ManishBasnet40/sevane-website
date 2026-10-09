@@ -12,11 +12,9 @@ export default function VideoHeroSection({
   isLoaded = true,
 }: VideoHeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-
   const videoStageRef = useRef<HTMLDivElement>(null);
   const videoInnerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-
   const introTextRef = useRef<HTMLParagraphElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
 
@@ -180,7 +178,7 @@ export default function VideoHeroSection({
           "<"
         )
         .to(
-          scrollCueRef.current,
+          scrollCue,
           {
             opacity: 0,
             y: -12,
@@ -271,21 +269,10 @@ export default function VideoHeroSection({
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-6 pb-12 sm:px-8 sm:pb-14 md:px-12 md:pb-16 lg:px-16 lg:pb-20">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-6 pb-12 md:px-16 md:pb-16 lg:px-20 lg:pb-20 xl:px-24">
         <p
           ref={introTextRef}
-          className="
-            max-w-[760px]
-            font-display
-            text-[17vw]
-            font-medium
-            leading-[0.76]
-            tracking-[-0.055em]
-            text-white
-            sm:text-[14vw]
-            md:text-[11vw]
-            lg:text-[8.5vw]
-          "
+          className="max-w-[760px] font-display text-[17vw] font-medium leading-[0.76] tracking-[-0.055em] text-white sm:text-[14vw] md:text-[11vw] lg:text-[8.5vw]"
         >
           Ritual,
           <br />
@@ -295,7 +282,7 @@ export default function VideoHeroSection({
 
       <div
         ref={scrollCueRef}
-        className="pointer-events-none absolute bottom-8 right-6 z-20 flex items-center gap-3 sm:right-8 md:right-12 lg:right-16"
+        className="pointer-events-none absolute bottom-8 right-6 z-20 flex items-center gap-3 sm:right-8 md:right-16 lg:right-20 xl:right-24"
       >
         <span className="font-sans text-[7px] font-medium uppercase tracking-[0.28em] text-white/70 sm:text-[8px]">
           Scroll to explore
@@ -308,5 +295,3 @@ export default function VideoHeroSection({
     </section>
   );
 }
-
-

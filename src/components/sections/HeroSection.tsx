@@ -1,247 +1,53 @@
+
 "use client";
 
-import React, { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
-import { EDITORIAL_ASSETS } from "@/lib/constants/assets";
-import { BRAND_INFO } from "@/lib/constants/brand";
+import Button from "@/components/common/Button";
 
-interface HeroSectionProps {
-  isLoaded?: boolean;
-}
-
-export const HeroSection: React.FC<HeroSectionProps> = ({
-  isLoaded = true,
-}) => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const textRef = useRef<HTMLParagraphElement>(null);
-  const actionRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const imageInnerRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      if (!isLoaded) {
-        gsap.set(
-          [
-            labelRef.current,
-            titleRef.current,
-            textRef.current,
-            actionRef.current,
-            imageRef.current,
-          ],
-          {
-            opacity: 0,
-          }
-        );
-
-        gsap.set(titleRef.current, {
-          y: 35,
-        });
-
-        gsap.set(
-          [
-            labelRef.current,
-            textRef.current,
-            actionRef.current,
-          ],
-          {
-            y: 18,
-          }
-        );
-
-        gsap.set(imageRef.current, {
-          y: 30,
-        });
-
-        gsap.set(imageInnerRef.current, {
-          scale: 1.06,
-        });
-
-        return;
-      }
-
-      const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-      if (reducedMotion) {
-        gsap.set(
-          [
-            labelRef.current,
-            titleRef.current,
-            textRef.current,
-            actionRef.current,
-            imageRef.current,
-          ],
-          {
-            clearProps: "all",
-          }
-        );
-
-        gsap.set(imageInnerRef.current, {
-          clearProps: "all",
-        });
-
-        return;
-      }
-
-      const tl = gsap.timeline({
-        defaults: {
-          ease: "power3.out",
-        },
-      });
-
-      tl.to(labelRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.65,
-      })
-        .to(
-          titleRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power4.out",
-          },
-          "-=0.35"
-        )
-        .to(
-          textRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.75,
-          },
-          "-=0.4"
-        )
-        .to(
-          actionRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.65,
-          },
-          "-=0.4"
-        )
-        .to(
-          imageRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-          },
-          "-=0.8"
-        )
-        .to(
-          imageInnerRef.current,
-          {
-            scale: 1,
-            duration: 1.5,
-            ease: "power3.out",
-          },
-          "-=1"
-        );
-
-      if (sectionRef.current) {
-        gsap.to(imageInnerRef.current, {
-          yPercent: 5,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.2,
-          },
-        });
-      }
-    },
-    {
-      scope: sectionRef,
-      dependencies: [isLoaded],
-    }
-  );
-
+export default function HeroSection() {
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden bg-ivory px-6 py-24 text-ink sm:px-10 sm:py-28 md:px-14 md:py-32 lg:px-20 lg:py-36"
-      aria-label="Sévane Introduction"
-    >
-      <div className="mx-auto grid max-w-7xl items-center gap-16 md:gap-20 lg:grid-cols-[1fr_0.85fr] lg:gap-24 xl:gap-32">
-        <div className="max-w-2xl">
-          <span
-            ref={labelRef}
-            className="block font-sans text-[9px] font-medium uppercase tracking-[0.28em] text-gold"
-          >
-            The Sévane Philosophy
+    <section className="relative isolate min-h-[760px] overflow-hidden bg-[#F8F8F3] font-[var(--font-montserrat)] text-[#30302B] md:min-h-[900px] lg:min-h-screen">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_65%_48%,rgba(231,220,198,0.35),transparent_60%)]" />
+
+      <div className="relative mx-auto flex min-h-[760px] max-w-[1900px] items-center px-6 py-16 sm:px-10 md:min-h-[900px] md:px-14 lg:min-h-screen lg:px-16 xl:px-24">
+        <div className="relative z-20 flex w-full flex-col items-start lg:w-[43%] lg:py-20">
+          <span className="mb-6 text-xs font-medium uppercase tracking-[0.24em] text-[#8C887C] sm:text-sm">
+            Our Bestsellers
           </span>
 
-          <h2
-            ref={titleRef}
-            className="mt-7 font-display text-[3.5rem] font-medium leading-[0.88] tracking-[-0.05em] text-ink sm:text-[4.7rem] md:text-[5.4rem] lg:text-[5.8rem] xl:text-[6.8rem]"
-          >
-            A quiet
+          <h1 className="max-w-xl font-[var(--font-cormorant)] text-5xl font-medium leading-[1.05] tracking-[-0.035em] text-[#30302B] sm:text-6xl md:text-7xl lg:text-[4.5rem] xl:text-[5.5rem]">
+            Glow naturally.
             <br />
-            approach to
-            <br />
-            <span className="font-editorial-italic">
-              beauty.
-            </span>
-          </h2>
+            Every day.
+          </h1>
 
-          <p
-            ref={textRef}
-            className="mt-8 max-w-md font-editorial-italic text-lg leading-[1.55] text-ink/70 sm:mt-10 sm:text-xl"
-          >
-            {BRAND_INFO.promise}
+          <p className="mt-6 max-w-md text-base leading-8 text-[#68685E] sm:text-lg">
+            Thoughtfully formulated products that hydrate, protect, and reveal
+            your skin&apos;s natural radiance.
           </p>
 
-          <div
-            ref={actionRef}
-            className="mt-9 sm:mt-11"
-          >
-            <Link
-              href="#story"
-              className="group inline-flex items-center gap-4 font-sans text-[9px] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:text-gold"
-            >
-              <span>Discover Our Story</span>
-
-              <span className="text-base transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
-            </Link>
+          <div className="mt-8">
+            <Button href="#products">Shop Bestsellers</Button>
           </div>
         </div>
 
-        <div
-          ref={imageRef}
-          className="relative mx-auto w-full max-w-[470px] lg:mx-0 lg:ml-auto"
-        >
-          <div className="relative aspect-[4/5] w-full overflow-hidden">
-            <div
-              ref={imageInnerRef}
-              className="relative h-full w-full will-change-transform"
-            >
-              <Image
-                src={EDITORIAL_ASSETS.hero.stillLife.src}
-                alt={EDITORIAL_ASSETS.hero.stillLife.alt}
-                fill
-                sizes="(max-width: 1024px) 90vw, 470px"
-                className="object-cover object-center"
-              />
-            </div>
+        <div className="pointer-events-none absolute inset-y-0 right-[-16%] flex w-[125%] items-center justify-end sm:right-[-14%] sm:w-[120%] lg:right-[-15%] lg:w-[100%] xl:right-[-14%] xl:w-[98%]">
+          <div className="absolute right-[8%] top-[12%] h-64 w-64 rounded-full bg-[#EAD7CE]/40 blur-[100px] sm:h-96 sm:w-96" />
+
+          <div className="absolute bottom-[8%] right-[8%] h-32 w-[65%] rounded-[50%] bg-[#E7DCC6]/40 blur-[70px]" />
+
+          <div className="relative h-[620px] w-full sm:h-[780px] md:h-[950px] lg:h-[105vh] lg:min-h-[850px] xl:h-[115vh] xl:min-h-[1000px]">
+            <Image
+              src="/images/brand/removebg.png"
+              alt="Sévane skincare product collection"
+              fill
+              priority
+              sizes="(max-width: 1023px) 125vw, 98vw"
+              className="object-contain object-center"
+            />
           </div>
         </div>
       </div>
     </section>
   );
-};
-
-export default HeroSection;
+}

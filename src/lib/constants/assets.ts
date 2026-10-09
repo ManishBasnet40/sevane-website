@@ -1,6 +1,6 @@
 export const OFFICIAL_ASSETS = {
-  logo: "/images/brand/sevane-logo.png",
-  logoJpg: "/images/brand/sevane-logo.jpg",
+  logo: "/images/brand/logowhite.png",
+  logoJpg: "/images/brand/logowhite.png",
 } as const;
 
 export interface EditorialImageAsset {
@@ -38,15 +38,15 @@ export const EDITORIAL_ASSETS = {
   },
   rituals: {
     serumEclat: {
-      src: "/images/brand/product1.jpg",
+      src: "/images/brand/product1.png",
       alt: "Sérum Éclat 30 ml bottle",
     },
     baumeDeNuit: {
-      src: "/images/brand/product2.jpg",
+      src: "/images/brand/product2.png",
       alt: "Baume de Nuit 50 ml jar",
     },
     cremeHydratante: {
-      src: "/images/brand/product3.jpg",
+      src: "/images/brand/product3.png",
       alt: "Crème Hydratante 50 ml jar",
     },
   },

@@ -3,225 +3,294 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { PRODUCTS } from "@/lib/constants/brand";
-import BrandDiamond from "../brand/BrandDiamond";
+
+const BACKGROUND_COLOR = "#F8F8F3";
+const products = PRODUCTS.slice(0, 3);
 
 export default function RitualsSection() {
   const containerRef = useRef<HTMLElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const backgroundRef = useRef<HTMLDivElement | null>(null);
-  const overtureRef = useRef<HTMLDivElement | null>(null);
-  const folioRef = useRef<HTMLDivElement | null>(null);
-
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const backgroundRefs = useRef<(HTMLDivElement | null)[]>([]);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const infoRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const numeralRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const handleScrollToProduct = (index: number) => {
-    const container = containerRef.current;
-
-    if (!container) return;
-
-    const positions = [0.08, 0.5, 0.92];
-    const progress = positions[index] ?? 0;
-
-    const rect = container.getBoundingClientRect();
-    const start = window.scrollY + rect.top;
-    const scrollDistance = container.offsetHeight - window.innerHeight;
-
-    window.scrollTo({
-      top: start + scrollDistance * progress,
-      behavior: "smooth",
-    });
-  };
+  const bottleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const textRefs = useRef<(HTMLElement | null)[]>([]);
+  const previewRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const indicatorRef = useRef<HTMLSpanElement | null>(null);
 
   useGSAP(
     () => {
       const container = containerRef.current;
       const stage = stageRef.current;
-      const background = backgroundRef.current;
-      const overture = overtureRef.current;
-      const folio = folioRef.current;
+      const track = trackRef.current;
+
+      if (!container || !stage || !track || products.length === 0) return;
+
+      const slides = productRefs.current.slice(0, products.length);
+      const bottles = bottleRefs.current.slice(0, products.length);
+      const textBlocks = textRefs.current.slice(0, products.length);
+      const previews = previewRefs.current.slice(0, products.length);
+      const backgrounds = backgroundRefs.current
+        .slice(0, products.length)
+        .filter((element): element is HTMLDivElement => element !== null);
 
       if (
-        !container ||
-        !stage ||
-        !background ||
-        !overture ||
-        !folio
+        slides.some((element) => !element) ||
+        bottles.some((element) => !element) ||
+        textBlocks.some((element) => !element)
       ) {
         return;
       }
 
-      const products = productRefs.current.filter(
-        (item): item is HTMLDivElement => item !== null
-      );
+      const validSlides = slides as HTMLDivElement[];
+      const validBottles = bottles as HTMLDivElement[];
+      const validTextBlocks = textBlocks as HTMLElement[];
 
-      const images = imageRefs.current.filter(
-        (item): item is HTMLDivElement => item !== null
-      );
+      let slideWidth = stage.clientWidth;
+      let currentIndex = 0;
 
-      const infos = infoRefs.current.filter(
-        (item): item is HTMLDivElement => item !== null
-      );
+      const updateNavigation = (index: number) => {
+        const safeIndex = gsap.utils.clamp(0, products.length - 1, index);
 
-      const numerals = numeralRefs.current.filter(
-        (item): item is HTMLDivElement => item !== null
-      );
+        if (indicatorRef.current) {
+          indicatorRef.current.textContent = String(safeIndex + 1).padStart(
+            2,
+            "0"
+          );
+        }
 
-      const tabs = tabRefs.current.filter(
-        (item): item is HTMLButtonElement => item !== null
-      );
+        previews.forEach((preview, previewIndex) => {
+          if (!preview) return;
 
-      gsap.set(products, {
-        opacity: 0,
-      });
-
-      gsap.set(images, {
-        opacity: 0,
-        scale: 0.9,
-        x: -25,
-      });
-
-      gsap.set(infos, {
-        opacity: 0,
-        x: 35,
-      });
-
-      gsap.set(numerals, {
-        opacity: 0,
-      });
-
-      gsap.set(background, {
-        opacity: 0,
-      });
-
-      gsap.set(overture, {
-        opacity: 0,
-        y: 15,
-      });
-
-      gsap.set(folio, {
-        opacity: 0,
-        y: 15,
-      });
-
-      const activateProduct = (index: number) => {
-        products.forEach((product, productIndex) => {
-          gsap.to(product, {
-            opacity: productIndex === index ? 1 : 0,
-            duration: 0.45,
-            ease: "power2.out",
-            overwrite: true,
-          });
-        });
-
-        images.forEach((image, imageIndex) => {
-          gsap.to(image, {
-            opacity: imageIndex === index ? 1 : 0,
-            scale: imageIndex === index ? 1 : 0.9,
-            x: imageIndex === index ? 0 : -25,
-            duration: 0.8,
-            ease: "power3.out",
-            overwrite: true,
-          });
-        });
-
-        infos.forEach((info, infoIndex) => {
-          gsap.to(info, {
-            opacity: infoIndex === index ? 1 : 0,
-            x: infoIndex === index ? 0 : 35,
-            duration: 0.7,
-            ease: "power3.out",
-            overwrite: true,
-          });
-        });
-
-        numerals.forEach((numeral, numeralIndex) => {
-          gsap.to(numeral, {
-            opacity: numeralIndex === index ? 1 : 0,
-            duration: 0.5,
-            ease: "power2.out",
-            overwrite: true,
-          });
-        });
-
-        tabs.forEach((tab, tabIndex) => {
-          gsap.to(tab, {
-            opacity: tabIndex === index ? 1 : 0.4,
+          gsap.to(preview, {
+            opacity: previewIndex === safeIndex ? 1 : 0.4,
             duration: 0.3,
-            ease: "power2.out",
             overwrite: true,
           });
+
+          preview.setAttribute(
+            "aria-current",
+            previewIndex === safeIndex ? "true" : "false"
+          );
         });
       };
 
-      activateProduct(0);
-
-      const intro = gsap.timeline();
-
-      intro
-        .to(background, {
-          opacity: 1,
-          duration: 0.9,
-          ease: "power2.out",
-        })
-        .to(
-          overture,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.65,
-            ease: "power3.out",
-          },
-          "-=0.55"
-        )
-        .to(
-          folio,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.65,
-            ease: "power3.out",
-          },
-          "-=0.45"
+      const updateVisuals = (progress: number) => {
+        const clampedProgress = gsap.utils.clamp(
+          0,
+          products.length - 1,
+          progress
         );
 
-      const scrollAnimation = gsap.to(
-        {},
-        {
-          scrollTrigger: {
-            trigger: container,
-            start: "top top",
-            end: "bottom bottom",
-            pin: stage,
-            scrub: 1,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const value = self.progress;
+        gsap.set(track, {
+          x: -clampedProgress * slideWidth,
+        });
 
-              if (value < 0.333) {
-                activateProduct(0);
-              } else if (value < 0.666) {
-                activateProduct(1);
-              } else {
-                activateProduct(2);
-              }
-            },
-          },
+        backgrounds.forEach((background, index) => {
+          const distance = Math.abs(index - clampedProgress);
+
+          gsap.set(background, {
+            autoAlpha: gsap.utils.clamp(0, 1, 1 - distance),
+          });
+        });
+
+        validSlides.forEach((slide, index) => {
+          const distanceRaw = index - clampedProgress;
+          const distance = Math.min(Math.abs(distanceRaw), 1);
+          const parallax =
+            distanceRaw > 0 ? distanceRaw * slideWidth * -0.5 : 0;
+          const isActive = Math.round(clampedProgress) === index;
+
+          gsap.set(validBottles[index], {
+            xPercent: -50,
+            yPercent: -50,
+            x: parallax,
+            y: 0,
+            scaleX: 1 - distance * 0.19,
+            scaleY: 1 - distance * 0.375,
+            transformOrigin: "center center",
+            force3D: true,
+          });
+
+          gsap.set(validTextBlocks[index], {
+            autoAlpha: isActive ? 1 : 0,
+          });
+
+          gsap.set(slide, {
+            autoAlpha: distance < 1 ? 1 : 0,
+          });
+        });
+
+        const nearestIndex = Math.round(clampedProgress);
+
+        if (nearestIndex !== currentIndex) {
+          currentIndex = nearestIndex;
+          updateNavigation(nearestIndex);
         }
+      };
+
+      const refreshLayout = () => {
+        slideWidth = stage.clientWidth;
+
+        gsap.set(track, {
+          width: `${products.length * slideWidth}px`,
+        });
+
+        gsap.set(validSlides, {
+          width: `${slideWidth}px`,
+          flex: "0 0 auto",
+        });
+
+        updateVisuals(currentIndex);
+      };
+
+      gsap.set(track, {
+        width: `${products.length * slideWidth}px`,
+        x: 0,
+      });
+
+      gsap.set(validSlides, {
+        width: `${slideWidth}px`,
+        flex: "0 0 auto",
+        autoAlpha: 1,
+      });
+
+      gsap.set(backgrounds, {
+        autoAlpha: 0,
+      });
+
+      if (backgrounds[0]) {
+        gsap.set(backgrounds[0], {
+          autoAlpha: 1,
+        });
+      }
+
+      gsap.set(validBottles, {
+        xPercent: -50,
+        yPercent: -50,
+        transformOrigin: "center center",
+      });
+
+      gsap.set(validTextBlocks, {
+        autoAlpha: 0,
+      });
+
+      gsap.set(validTextBlocks[0], {
+        autoAlpha: 1,
+      });
+
+      const introElements =
+        validTextBlocks[0].querySelectorAll("[data-ritual-intro]");
+
+      const introTimeline = gsap.timeline({
+        paused: true,
+        defaults: {
+          ease: "power3.out",
+        },
+      });
+
+      introTimeline.fromTo(
+        introElements,
+        {
+          autoAlpha: 0,
+          y: 28,
+        },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.1,
+          clearProps: "transform",
+        },
+        0
       );
 
+      const trigger = ScrollTrigger.create({
+        id: "rituals-scroll",
+        trigger: container,
+        start: "top top",
+        end: () => `+=${window.innerHeight * (products.length - 1) * 2}`,
+        pin: stage,
+        scrub: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          updateVisuals(self.progress * (products.length - 1));
+        },
+        onRefresh: refreshLayout,
+      });
+
+      previews.forEach((preview, index) => {
+        if (!preview) return;
+
+        preview.onclick = () => {
+          const safeIndex = gsap.utils.clamp(
+            0,
+            products.length - 1,
+            index
+          );
+
+          const targetProgress = safeIndex / (products.length - 1 || 1);
+          const targetY =
+            trigger.start +
+            (trigger.end - trigger.start) * targetProgress;
+
+          window.scrollTo({
+            top: targetY,
+            behavior: "smooth",
+          });
+        };
+      });
+
+      const introObserver = ScrollTrigger.create({
+        trigger: container,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          introTimeline.play(0);
+        },
+      });
+
+      const handleResize = () => {
+        refreshLayout();
+        ScrollTrigger.refresh();
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        updateVisuals(0);
+      });
+
       return () => {
-        scrollAnimation.scrollTrigger?.kill();
+        trigger.kill();
+        introObserver.kill();
+        introTimeline.kill();
+        window.removeEventListener("resize", handleResize);
+
+        previews.forEach((preview) => {
+          if (preview) preview.onclick = null;
+        });
+
+        gsap.killTweensOf([
+          track,
+          ...validSlides,
+          ...validBottles,
+          ...validTextBlocks,
+          ...backgrounds,
+          ...previews.filter(
+            (preview): preview is HTMLButtonElement => preview !== null
+          ),
+        ]);
       };
     },
     {
       scope: containerRef,
+      dependencies: [products.length],
+      revertOnUpdate: true,
     }
   );
 
@@ -229,243 +298,192 @@ export default function RitualsSection() {
     <>
       <section
         ref={containerRef}
-        className="relative hidden min-h-[300svh] w-full bg-[#f8f8f3] lg:block"
+        id="rituals"
+        className="relative hidden lg:block"
+        style={{
+          backgroundColor: BACKGROUND_COLOR,
+          minHeight: `${100 + Math.max(products.length - 1, 0) * 100}svh`,
+        }}
       >
         <div
           ref={stageRef}
-          className="relative flex h-[100svh] min-h-[720px] w-full overflow-hidden bg-[#f8f8f3]"
+          className="relative h-[100svh] min-h-[700px] w-full overflow-hidden"
+          style={{ backgroundColor: BACKGROUND_COLOR }}
         >
+          <div className="rituals__bg pointer-events-none absolute inset-0">
+            {products.map((product, index) => (
+              <div
+                key={product.id}
+                ref={(element) => {
+                  backgroundRefs.current[index] = element;
+                }}
+                className="absolute inset-0"
+                style={{ backgroundColor: BACKGROUND_COLOR }}
+              >
+                <div className="absolute inset-0 opacity-[0.08]">
+                  <Image
+                    src={product.placeholderSrc}
+                    alt=""
+                    fill
+                    sizes="100vw"
+                    className="object-contain blur-3xl"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
           <div
-            ref={backgroundRef}
-            className="pointer-events-none absolute inset-0 bg-[#f8f8f3]"
-          />
-
-          <div className="relative z-10 flex h-full w-full flex-col px-6 py-8 md:px-16 lg:px-20 xl:px-24">
-            <header className="flex w-full items-center justify-between">
+            ref={trackRef}
+            className="rituals__track relative z-10 flex h-full"
+          >
+            {products.map((product, index) => (
               <div
-                ref={overtureRef}
-                className="flex items-center gap-4 text-[#30302B]"
+                key={product.id}
+                ref={(element) => {
+                  productRefs.current[index] = element;
+                }}
+                className="rituals__slide relative h-full shrink-0"
               >
-                <BrandDiamond />
-
-                <span className="font-sans text-[10px] font-medium uppercase tracking-[0.3em]">
-                  The Rituals
-                </span>
-              </div>
-
-              <div
-                ref={folioRef}
-                className="font-editorial-italic text-sm text-[#30302B]/50"
-              >
-                Sévane — Collection
-              </div>
-            </header>
-
-            <div className="relative flex min-h-0 flex-1 w-full items-center">
-              <div className="absolute left-0 top-1/2 z-0 -translate-y-1/2 select-none">
-                {PRODUCTS.map((product, index) => (
+                <div className="absolute inset-0 flex items-center justify-center">
                   <div
-                    key={`numeral-${product.id}`}
                     ref={(element) => {
-                      numeralRefs.current[index] = element;
+                      bottleRefs.current[index] = element;
                     }}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 font-display text-[18vw] leading-none tracking-[-0.08em] text-[#30302B]/[0.035] xl:text-[16vw]"
+                    className="rituals__bottle-img absolute left-1/2 top-1/2 h-[72vh] max-h-[780px] w-[70vw] max-w-[900px]"
                   >
-                    {String(index + 1).padStart(2, "0")}
+                    <Image
+                      src={product.placeholderSrc}
+                      alt={product.name}
+                      fill
+                      priority={index === 0}
+                      sizes="(min-width: 1024px) 70vw, 100vw"
+                      className="object-contain"
+                    />
                   </div>
-                ))}
-              </div>
-
-              <div className="relative grid h-full w-full grid-cols-12 items-center gap-8 xl:gap-12 2xl:gap-20">
-                <div className="relative col-span-6 flex h-full items-center justify-center">
-                  {PRODUCTS.map((product, index) => (
-                    <div
-                      key={`product-${product.id}`}
-                      ref={(element) => {
-                        productRefs.current[index] = element;
-                      }}
-                      className="absolute inset-0 flex items-center justify-center"
-                    >
-                      <div
-                        ref={(element) => {
-                          imageRefs.current[index] = element;
-                        }}
-                        className="relative flex h-[72vh] min-h-[520px] w-full max-w-[620px] items-center justify-center"
-                      >
-                        <Image
-                          src={product.placeholderSrc}
-                          alt={product.name}
-                          fill
-                          priority={index === 0}
-                          sizes="(min-width: 1536px) 620px, 520px"
-                          className="relative z-10 object-contain p-8 xl:p-12 2xl:p-16"
-                        />
-                      </div>
-                    </div>
-                  ))}
                 </div>
 
-                <div className="relative col-span-6 flex h-full items-center">
-                  {PRODUCTS.map((product, index) => (
-                    <div
-                      key={`info-${product.id}`}
-                      ref={(element) => {
-                        infoRefs.current[index] = element;
-                      }}
-                      className="absolute left-0 w-full max-w-[760px] pr-4 xl:max-w-[850px] 2xl:max-w-[900px]"
-                    >
-                      <div className="flex items-center gap-4">
-                        <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-[#B0925C]">
-                          {product.category}
-                        </span>
-
-                        <span className="font-sans text-[10px] uppercase tracking-[0.22em] text-[#30302B]/40">
-                          {product.volume}
-                        </span>
-                      </div>
-
-                      <h2 className="mt-7 max-w-[850px] font-display text-[clamp(3.5rem,6vw,7.5rem)] font-normal leading-[0.86] tracking-[-0.045em] text-[#30302B]">
-                        {product.name}
-                      </h2>
-
-                      <p className="mt-7 max-w-[650px] font-editorial-italic text-[clamp(1.25rem,1.7vw,2rem)] leading-[1.25] text-[#30302B]/65">
-                        {product.role}
-                      </p>
-
-                      <p className="mt-8 max-w-[700px] font-sans text-sm leading-7 text-[#30302B]/65 xl:text-[15px] xl:leading-8">
-                        {product.description}
-                      </p>
-
-                      <div className="mt-8">
-                        <span className="block font-sans text-[9px] uppercase tracking-[0.28em] text-[#B0925C]">
-                          Ritual
-                        </span>
-
-                        <p className="mt-3 max-w-[400px] font-sans text-xs leading-6 text-[#30302B]/60">
-                          {product.ritualStep}
-                        </p>
-                      </div>
-
-                      <a
-                        href={`/products/${product.id}`}
-                        className="group mt-9 inline-flex items-center gap-5 font-sans text-[10px] uppercase tracking-[0.3em] text-[#30302B] transition-colors duration-500 hover:text-[#B0925C]"
-                      >
-                        Explore
-                        <span className="text-base transition-transform duration-500 group-hover:translate-x-2">
-                          ↗
-                        </span>
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <footer className="relative z-20 flex w-full items-end justify-between pt-5">
-              <div className="flex items-center gap-7">
-                {PRODUCTS.map((product, index) => (
-                  <button
-                    key={`tab-${product.id}`}
-                    ref={(element) => {
-                      tabRefs.current[index] = element;
-                    }}
-                    type="button"
-                    onClick={() => handleScrollToProduct(index)}
-                    className="group flex items-center gap-3 font-sans text-[9px] uppercase tracking-[0.22em] text-[#30302B] transition-opacity duration-300"
+                <article
+                  ref={(element) => {
+                    textRefs.current[index] = element;
+                  }}
+                  className="rituals__slide-info absolute bottom-0 left-8 top-0 z-20 flex w-[30%] max-w-[420px] flex-col justify-center text-[#30302B] xl:left-16 xl:max-w-[480px] 2xl:left-24"
+                >
+                  <p
+                    data-ritual-intro
+                    className="mb-5 text-xs uppercase tracking-[0.25em] text-[#77766F]"
                   >
-                    <span className="text-[#B0925C]">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+                    {product.category}
+                  </p>
 
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">
-                      {product.name}
-                    </span>
-                  </button>
-                ))}
+                  <h2
+                    data-ritual-intro
+                    className="text-5xl font-light leading-[1.05] tracking-[-0.045em] xl:text-6xl 2xl:text-7xl"
+                  >
+                    {product.name}
+                  </h2>
+
+                  <p
+                    data-ritual-intro
+                    className="mt-6 text-sm uppercase tracking-[0.18em] text-[#77766F]"
+                  >
+                    {product.volume}
+                  </p>
+
+                  <p
+                    data-ritual-intro
+                    className="mt-8 max-w-[400px] text-base leading-8 text-[#57564F]"
+                  >
+                    {product.description}
+                  </p>
+
+                  <p
+                    data-ritual-intro
+                    className="mt-8 max-w-[400px] text-xs uppercase leading-6 tracking-[0.2em] text-[#77766F]"
+                  >
+                    {product.role}
+                  </p>
+                </article>
               </div>
-            </footer>
+            ))}
+          </div>
+
+          <div className="absolute bottom-8 right-8 z-30 flex items-end gap-4 xl:bottom-10 xl:right-16 xl:gap-7 2xl:right-24">
+            {products.map((product, index) => (
+              <button
+                key={product.id}
+                ref={(element) => {
+                  previewRefs.current[index] = element;
+                }}
+                type="button"
+                aria-label={`View ${product.name}`}
+                aria-current={index === 0 ? "true" : "false"}
+                className="group flex w-[76px] cursor-pointer flex-col items-center gap-3 text-center xl:w-[100px]"
+              >
+                <span className="relative block h-[68px] w-full xl:h-[90px]">
+                  <Image
+                    src={product.placeholderSrc}
+                    alt={product.name}
+                    fill
+                    sizes="100px"
+                    className="object-contain transition-transform duration-500 group-hover:scale-105"
+                  />
+                </span>
+
+                <span className="min-h-8 text-[9px] uppercase leading-4 tracking-[0.12em] text-[#30302B] xl:text-[10px] xl:tracking-[0.15em]">
+                  {product.name}
+                </span>
+
+                <span className="h-px w-full bg-[#C9C5BB]" />
+              </button>
+            ))}
+
+            <div className="mb-6 flex shrink-0 items-center gap-2 text-xs tracking-[0.15em] text-[#30302B]">
+              <span ref={indicatorRef}>01</span>
+              <span className="text-[#77766F]">/</span>
+              <span>{String(products.length).padStart(2, "0")}</span>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="w-full bg-[#f8f8f3] px-6 py-20 lg:hidden">
-        <div className="mb-12 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <BrandDiamond />
-
-            <span className="font-sans text-[9px] uppercase tracking-[0.28em] text-[#30302B]">
-              The Rituals
-            </span>
-          </div>
-
-          <span className="font-editorial-italic text-sm text-[#30302B]/50">
-            Sévane
-          </span>
-        </div>
-
-        <div className="flex flex-col gap-24">
-          {PRODUCTS.map((product, index) => (
-            <article
-              key={product.id}
-              className="relative w-full"
-            >
-              <div className="relative aspect-[4/5] w-full overflow-hidden">
+      <section
+        className="block px-5 py-20 lg:hidden"
+        style={{ backgroundColor: BACKGROUND_COLOR }}
+      >
+        <div className="mx-auto flex max-w-xl flex-col gap-20">
+          {products.map((product, index) => (
+            <article key={product.id} className="text-[#30302B]">
+              <div className="relative mx-auto mb-8 h-[55svh] min-h-[360px] w-full max-w-[420px]">
                 <Image
                   src={product.placeholderSrc}
                   alt={product.name}
                   fill
-                  sizes="100vw"
-                  className="object-contain p-8"
+                  priority={index === 0}
+                  sizes="(max-width: 1023px) 100vw, 420px"
+                  className="object-contain"
                 />
-
-                <span className="absolute left-5 top-5 font-display text-5xl leading-none text-[#30302B]/10">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
               </div>
 
-              <div className="pt-7">
-                <div className="flex items-center gap-3">
-                  <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-[#B0925C]">
-                    {product.category}
-                  </span>
+              <p className="mb-4 text-xs uppercase tracking-[0.25em] text-[#77766F]">
+                {product.category}
+              </p>
 
-                  <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-[#30302B]/40">
-                    {product.volume}
-                  </span>
-                </div>
+              <h2 className="text-4xl font-light leading-tight tracking-[-0.04em]">
+                {product.name}
+              </h2>
 
-                <h2 className="mt-4 font-display text-[clamp(2.8rem,12vw,5rem)] font-normal leading-[0.9] tracking-[-0.035em] text-[#30302B]">
-                  {product.name}
-                </h2>
+              <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[#77766F]">
+                {product.volume}
+              </p>
 
-                <p className="mt-5 font-editorial-italic text-xl leading-[1.25] text-[#30302B]/70">
-                  {product.role}
-                </p>
+              <p className="mt-6 text-sm leading-7 text-[#57564F]">
+                {product.description}
+              </p>
 
-                <p className="mt-7 font-sans text-sm leading-7 text-[#30302B]/65">
-                  {product.description}
-                </p>
-
-                <div className="mt-6">
-                  <span className="block font-sans text-[9px] uppercase tracking-[0.25em] text-[#B0925C]">
-                    Ritual
-                  </span>
-
-                  <p className="mt-3 font-sans text-sm leading-7 text-[#30302B]/65">
-                    {product.ritualStep}
-                  </p>
-                </div>
-
-                <a
-                  href={`/products/${product.id}`}
-                  className="group mt-8 inline-flex items-center gap-5 font-sans text-[10px] uppercase tracking-[0.28em] text-[#30302B]"
-                >
-                  Explore
-                  <span className="text-base transition-transform duration-500 group-hover:translate-x-2">
-                    ↗
-                  </span>
-                </a>
-              </div>
+              <p className="mt-6 text-xs uppercase leading-6 tracking-[0.18em] text-[#77766F]">
+                {product.role}
+              </p>
             </article>
           ))}
         </div>

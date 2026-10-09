@@ -94,7 +94,7 @@ export const Navbar: React.FC = () => {
           ${
             isAtTop
               ? "bg-transparent"
-              : "bg-white"
+              : "bg-[#30302B]"
           }
         `}
       >
@@ -159,7 +159,7 @@ export const Navbar: React.FC = () => {
                   ${
                     isAtTop
                       ? "text-white"
-                      : "text-[#30302B]"
+                      : "text-white"
                   }
                 `}
               >
@@ -202,7 +202,7 @@ export const Navbar: React.FC = () => {
               ${
                 isAtTop
                   ? "border-white/70 text-white hover:border-white hover:bg-white hover:text-[#30302B]"
-                  : "border-[#30302B]/40 text-[#30302B] hover:border-[#30302B] hover:bg-[#30302B] hover:text-white"
+                  : "border-white/40 text-white hover:border-white hover:bg-white hover:text-[#30302B]"
               }
             `}
           >
@@ -227,11 +227,7 @@ export const Navbar: React.FC = () => {
             "
           >
             <span
-              className={`h-[2px] w-6 transition-all duration-300 ${
-                isAtTop
-                  ? "bg-white"
-                  : "bg-[#30302B]"
-              } ${
+              className={`h-[2px] w-6 bg-white transition-all duration-300 ${
                 mobileMenuOpen
                   ? "translate-y-[3.5px] rotate-45"
                   : ""
@@ -239,11 +235,7 @@ export const Navbar: React.FC = () => {
             />
 
             <span
-              className={`h-[2px] w-6 transition-all duration-300 ${
-                isAtTop
-                  ? "bg-white"
-                  : "bg-[#30302B]"
-              } ${
+              className={`h-[2px] w-6 bg-white transition-all duration-300 ${
                 mobileMenuOpen
                   ? "opacity-0"
                   : ""
@@ -251,11 +243,7 @@ export const Navbar: React.FC = () => {
             />
 
             <span
-              className={`h-[2px] w-6 transition-all duration-300 ${
-                isAtTop
-                  ? "bg-white"
-                  : "bg-[#30302B]"
-              } ${
+              className={`h-[2px] w-6 bg-white transition-all duration-300 ${
                 mobileMenuOpen
                   ? "-translate-y-[3.5px] -rotate-45"
                   : ""

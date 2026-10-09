@@ -509,7 +509,7 @@ export default function PhilosophySection() {
             perspective: "1600px",
           }}
         >
-          <div className="grid grid-cols-1 gap-x-10 gap-y-16 sm:grid-cols-2 sm:gap-x-12 lg:grid-cols-4 lg:gap-x-16 lg:items-start">
+          <div className="grid grid-cols-1 gap-x-10 gap-y-16 sm:grid-cols-2 sm:gap-x-12 lg:grid-cols-4 lg:items-start lg:gap-x-16">
             {PHILOSOPHY_PILLARS.map((pillar, index) => (
               <div
                 key={pillar.number}
@@ -649,24 +649,16 @@ export default function PhilosophySection() {
                           data-book-image
                         />
 
-                        <div className="absolute inset-0 bg-black/[0.08]" />
-
-                        <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-black/45 via-black/15 to-transparent" />
-
-                        <div className="absolute inset-x-0 bottom-0 h-[68%] bg-gradient-to-t from-black/90 via-black/60 to-black/5" />
-
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-black/10" />
+                        <div className="absolute inset-0 bg-black/[0.06]" />
                       </div>
 
-                      <div className="absolute inset-x-0 top-0 z-10 flex items-start justify-between px-5 pt-5 text-white sm:px-6 sm:pt-6">
+                      <div className="absolute left-0 top-0 z-10 px-5 pt-5 text-[#30302B] sm:px-6 sm:pt-6">
                         <span className="text-[10px] font-medium tracking-[0.18em] sm:text-xs">
                           {pillar.number}
                         </span>
-
-                        <span className="text-[9px] uppercase tracking-[0.22em] opacity-80 sm:text-[10px]">
-                          Sevane
-                        </span>
                       </div>
+
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[38%] bg-gradient-to-t from-black/45 via-black/15 to-transparent" />
 
                       <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-6 text-white sm:px-6 sm:pb-7">
                         <h3 className="max-w-full whitespace-nowrap pr-1 font-serif text-[clamp(1.6rem,2.45vw,2.7rem)] font-normal leading-[0.9] tracking-[-0.035em] text-white">
