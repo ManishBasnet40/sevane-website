@@ -3,51 +3,64 @@
 import { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/gsap";
-import { OFFICIAL_ASSETS } from "@/lib/constants/assets";
-import GoldRule from "../ui/GoldRule";
 
 export default function StorySection() {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const imageInnerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     const image = imageRef.current;
     const imageInner = imageInnerRef.current;
+    const content = contentRef.current;
 
-    if (!section || !image || !imageInner) return;
+    if (!section || !image || !imageInner || !content) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        image,
+        content.children,
+        { y: 20, opacity: 0 },
         {
-          yPercent: 10,
-        },
-        {
-          yPercent: -8,
-          ease: "none",
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          stagger: 0.1,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: section,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
+            start: "top 72%",
+            once: true,
           },
         }
       );
 
       gsap.fromTo(
         imageInner,
-        {
-          scale: 1.08,
-        },
+        { scale: 1.06 },
         {
           scale: 1,
+          duration: 1.5,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 75%",
+            once: true,
+          },
+        }
+      );
+
+      gsap.fromTo(
+        image,
+        { yPercent: 3 },
+        {
+          yPercent: -3,
           ease: "none",
           scrollTrigger: {
             trigger: section,
             start: "top bottom",
-            end: "center center",
+            end: "bottom top",
             scrub: 1,
           },
         }
@@ -61,66 +74,63 @@ export default function StorySection() {
     <section
       id="story"
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#F8F8F3] py-32 md:py-48"
+      className="relative overflow-hidden bg-[#F8F8F3] py-24 text-[#30302B] sm:py-32 lg:py-40"
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-20 px-6 md:grid-cols-12 md:px-12">
-        <div className="md:col-span-5 md:pt-20">
-          <p className="font-sans text-[9px] uppercase tracking-[0.28em] text-[#8C887C]">
-            01 — The House
-          </p>
-
-          <h2 className="mt-8 font-display text-6xl leading-[0.9] tracking-[-0.04em] text-[#30302B] md:text-8xl">
-            Caring for
-            <br />
-            skin as a
-            <br />
-            <span className="font-editorial-italic">
-              ritual.
-            </span>
-          </h2>
-
-          <GoldRule className="mt-10" />
-
-          <p className="mt-10 max-w-md font-sans text-sm leading-7 text-[#8C887C]">
-            Sévane is a skincare house built on the belief
-            that caring for skin should feel like a ritual,
-            not a routine.
-          </p>
-
-          <p className="mt-5 max-w-md font-sans text-sm leading-7 text-[#8C887C]">
-            Everything we make is unhurried, precise and
-            warm — rooted in botanical matter and made
-            with intention.
-          </p>
-        </div>
-
-        <div className="md:col-span-6 md:col-start-7">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-16 lg:px-20 xl:px-24">
+        <div className="grid grid-cols-1 items-center gap-14 md:grid-cols-12 md:gap-8 lg:gap-12">
           <div
-            ref={imageRef}
-            className="relative aspect-[4/5] overflow-hidden"
+            ref={contentRef}
+            className="relative z-10 md:col-span-6 md:pt-6 lg:col-span-5 lg:pt-10"
           >
-            <div
-              ref={imageInnerRef}
-              className="absolute inset-0"
-            >
-              {/* <Image
-                src={OFFICIAL_ASSETS.editorial.story}
-                alt="Sévane botanical still life"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              /> */}
+            <p className="mb-7 font-sans text-[9px] font-medium uppercase tracking-[0.22em] text-[#B0925C] sm:text-[10px]">
+              A quieter kind of skincare
+            </p>
+
+            <h2 className="max-w-[700px] font-display text-[clamp(3.8rem,7.5vw,7.8rem)] font-normal leading-[0.86] tracking-[-0.055em] text-[#30302B]">
+              Caring
+              <br />
+              for skin
+              <br />
+              as a
+              <br />
+              <span className="font-editorial-italic text-[#8C887C]">
+                ritual.
+              </span>
+            </h2>
+
+            <div className="mt-10 max-w-[390px] space-y-5 sm:mt-12">
+              <p className="font-sans text-[13px] leading-[1.95] text-[#68685E] sm:text-sm">
+                Sévane is a skincare house built on the belief that caring for skin should feel like a ritual, not a routine.
+              </p>
+
+              <p className="font-sans text-[13px] leading-[1.95] text-[#68685E] sm:text-sm">
+                Everything we make is unhurried, precise and warm — rooted in botanical matter and made with intention.
+              </p>
             </div>
+
+            <p className="mt-12 max-w-[320px] font-display text-xl italic leading-relaxed text-[#8C887C] sm:mt-16 sm:text-2xl">
+              Considered in every detail. Gentle by nature.
+            </p>
           </div>
 
-          <div className="mt-4 flex justify-between">
-            <span className="font-sans text-[8px] uppercase tracking-[0.24em] text-[#8C887C]">
-              Botanical study
-            </span>
-
-            <span className="font-sans text-[8px] uppercase tracking-[0.24em] text-[#8C887C]">
-              01 / 04
-            </span>
+          <div className="md:col-span-6 md:col-start-7 lg:col-span-6 lg:col-start-7">
+            <div
+              ref={imageRef}
+              className="relative aspect-[4/5] overflow-hidden bg-[#E7DCC6]"
+            >
+              <div
+                ref={imageInnerRef}
+                className="absolute inset-0 will-change-transform"
+              >
+                <Image
+                  src="/images/brand/morining.jpg"
+                  alt="Sévane botanical still life"
+                  fill
+                  sizes="(max-width: 767px) 90vw, (max-width: 1023px) 48vw, 44vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
